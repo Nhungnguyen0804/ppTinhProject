@@ -136,9 +136,9 @@ def show_compare_chart_all(t_real, t_rk4,t_adam,t_rkf45, P_rk4, P_exact,P_adam,P
     plt.plot(t_real, P_exact, "gs", label="Nghiệm chính xác", markersize=5, linewidth=2)
     
     # Vẽ nghiệm RK4 (Logistic)
-    plt.plot(t_rk4, P_rk4, "r^-", label=label1, markersize=5,linewidth=2)
-    plt.plot(t_adam, P_adam, "bv-", label=label2, markersize=5,linewidth=2)
-    plt.plot(t_rkf45, P_rkf45, "m+", label="Nghiệm chính xác", markersize=5, linewidth=2)
+    plt.plot(t_real, P_rk4, "r^-", label=label1, markersize=5,linewidth=2)
+    plt.plot(t_real, P_adam, "bv-", label=label2, markersize=5,linewidth=2)
+    plt.plot(t_real, P_rkf45, "m+", label="Nghiệm chính xác", markersize=5, linewidth=2)
 
    
 
