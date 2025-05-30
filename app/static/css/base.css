@@ -1,0 +1,287 @@
+:root {
+  --topBar: var(--mau2);
+  --header: white;
+  --menu-bar-color: var(--mau4);
+  --selected-menu-color: var(--mau3);
+  --text-select-login: var(--mau6);
+  --btn-search: var(--mau9);
+  --btn-search-hover: var(--mau8);
+  --footer-background: var(--mau6);
+
+  --text-header: black;
+  --text-login-register: black;
+  --text-menu-login-register: black;
+  --text-footer: white;
+  --text-menu-home: white;
+  --text-menu-home-hover: black;
+  --text-menu-home-selected: black;
+  --text-btn-search: white;
+  --text-btn-search-hover: black;
+
+  --mau1: #86946d;
+  --mau2: #fdd6c2;
+  --mau3: #ccd9b7;
+  --mau4: #7fa390;
+  --mau5: #b0e1e1;
+  --mau6: #b18a81;
+  --mau7: #d9c297;
+  --mau8: #c4a289;
+  --mau9: #7b544c;
+  --mau20: #f6ffe7;
+}
+
+/* Reset cơ bản */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Giúp padding, border không làm thay đổi kích thước thực tế của thẻ */
+}
+p {
+  margin-bottom: 0px !important;
+}
+html,
+body {
+  height: 100%; /*html, body cao 100% màn hình.*/
+  margin: 0;
+  display: flex;
+  flex-direction: column; /*flex container theo chiều dọc */
+}
+
+/* Body */
+body {
+  font-family: "Arial", sans-serif;
+  background-color: white;
+  color: #333;
+  line-height: 1.6;
+}
+.logo-image {
+  margin: 10px;
+}
+.name-web {
+  margin: 0 10px !important;
+  font-size: 45px;
+  font-weight: bold;
+}
+/* Header */
+.top-bar {
+  height: 30px; /* hoặc 4px  */
+  background-color: var(--topBar); /* màu pastel mint nhẹ chẳng hạn */
+  z-index: 999; /* Header phải nổi cao nhất */
+}
+header {
+  display: table-row;
+}
+.header-logo {
+  display: flex;
+  background-color: var(--header);
+  color: var(--text-header);
+  padding: 1rem;
+}
+
+.select-login {
+  margin-left: auto; /* tự đẩy xa trái, đẩy nó sát phải */
+  text-align: right;
+  color: var(--text-login-register);
+  text-decoration: none;
+}
+
+.nav-select-login a {
+  color: var(--text-menu-login-register);
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+.nav-select-login a:hover {
+  text-decoration: underline;
+  color: var(--text-select-login);
+}
+
+/* Main Content */
+main {
+  padding: 2rem;
+  flex: 1; /*<main> chiếm hết không gian còn lại (flex: 1), đẩy <footer> xuống dưới.*/
+}
+
+/* Footer */
+footer {
+  background-color: var(--footer-background);
+  color: var(--text-header);
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+  font-weight: bold;
+}
+
+/* menu chọn home, admin.home*/
+.nav-link {
+  color: var(--text-menu-home) !important;
+  /* chữ trắng */
+  font-weight: bold; /* chữ đậm */
+}
+.nav-link:hover {
+  color: var(--text-menu-home-hover) !important;
+  background-color: var(--selected-menu-color); /* nền nhạt khi hover */
+  text-decoration: none;
+}
+
+.nav-item.active .nav-link {
+  color: var(--text-menu-home-selected) !important;
+  background-color: var(--selected-menu-color); /* nền nhạt hơn khi active */
+  text-decoration: underline !important; /* gạch chân*/
+}
+
+.bg-light {
+  background-color: var(--menu-bar-color) !important;
+}
+
+/* ô search */
+.form-control mr-sm-2 {
+  background-color: antiquewhite;
+  border: 1px solid black;
+}
+
+.btn-outline-success {
+  background-color: var(--btn-search);
+  color: var(--text-btn-search);
+  font-weight: bold;
+  border: 2px solid black;
+}
+.btn-outline-success:hover {
+  color: var(--text-btn-search-hover);
+  font-weight: bold;
+  background-color: var(--btn-search-hover);
+  border: 2px solid black;
+}
+
+/* Flash thành công (đăng nhập thành công) */
+.flash.success {
+  background-color: #d4edda !important; /* Nền xanh nhạt */
+  color: #155724 !important; /* Chữ xanh đậm */
+}
+
+/* Flash lỗi (sai mật khẩu) */
+.flash.danger {
+  background-color: #f8d7da !important; /* Nền đỏ nhạt */
+  color: #721c24 !important; /* Chữ đỏ đậm */
+}
+.flash.warning {
+  background-color: yellow !important; /* Nền đỏ nhạt */
+  color: black !important; /* Chữ đỏ đậm */
+}
+.flash.info {
+  background-color: lightblue !important; /* Nền đỏ nhạt */
+  color: blue !important; /* Chữ đỏ đậm */
+}
+
+/* chung 
+.form-control {
+  border: 2px solid black !important;
+} */
+
+/* Các ô nhập liệu: username, password, email */
+form input[type="sélect"] {
+  width: 100%; /* Rộng 100% container cha */
+  padding: 12px 15px; /* Khoảng cách giữa viền và chữ bên trong input */
+  border: 2px solid black; /* Viền mỏng màu xám nhạt */
+  border-radius: 8px; /* Bo tròn góc */
+  font-size: 14px; /* Cỡ chữ vừa phải */
+  transition: 0.3s; /* Làm hiệu ứng mượt mà khi hover hoặc focus */
+  background-color: var(--mau20);
+}
+
+/* Khi click vào ô input: đổi màu viền */
+form input[type="text"]:focus,
+form input[type="password"]:focus,
+form input[type="email"]:focus,
+form input[type="date"]:focus {
+  border-color: #4ecdc4; /* Khi focus, viền chuyển màu xanh nhẹ */
+  outline: none; /* Bỏ viền xanh */
+}
+.form-select {
+  display: block;
+  width: 50%; /* Rộng 100% container cha */
+  padding: 12px 15px; /* Khoảng cách giữa viền và chữ bên trong input */
+  border: 2px solid black; /* Viền mỏng màu xám nhạt */
+  border-radius: 8px; /* Bo tròn góc */
+  font-size: 14px; /* Cỡ chữ vừa phải */
+  transition: 0.3s; /* Làm hiệu ứng mượt mà khi hover hoặc focus */
+  margin-bottom: 10px;
+}
+.form-select1 {
+  display: inline-block;
+  padding: 12px 15px; /* Khoảng cách giữa viền và chữ bên trong input */
+  border: 2px solid black; /* Viền mỏng màu xám nhạt */
+  border-radius: 8px; /* Bo tròn góc */
+  font-size: 14px; /* Cỡ chữ vừa phải */
+  transition: 0.3s; /* Làm hiệu ứng mượt mà khi hover hoặc focus */
+  margin: 10px;
+}
+
+.form-select:focus {
+  border-color: #4ecdc4; /* Khi focus, viền chuyển màu xanh nhẹ */
+  outline: none; /* Bỏ viền xanh mặc định của trình duyệt */
+}
+
+main {
+  background-color: var(--mau11);
+}
+
+/* .thick-border td,
+.thick-border th {
+  border: 2px solid #000; /* Đổi 2px thành dày mỏng tùy ý */
+/* } */
+
+table,
+th,
+td {
+  border: 2px solid black;
+  border-collapse: collapse;
+  background-color: white;
+}
+th,
+td {
+  padding: 8px;
+}
+.bang-co-thanh-truot {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.radio-group {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+/* Ẩn input radio thật */
+.radio-group input[type="radio"] {
+  display: none;
+}
+
+/* Hover cho nút chưa chọn
+.radio-group input[type="radio"]:not(:checked) + label:hover {
+  background-color: #cce5ff;
+  border-color: #007bff;
+  color: #004085;
+} */
+
+/* Style nút */
+.radio-group label {
+  display: inline-block;
+  padding: 12px 24px;
+  border: 2px solid #888;
+  border-radius: 6px;
+  background-color: #eee;
+  color: #333;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+}
+
+/* Khi radio được chọn => label đổi màu */
+.radio-group input[type="radio"]:checked + label {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.6);
+}

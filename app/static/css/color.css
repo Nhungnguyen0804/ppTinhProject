@@ -1,0 +1,28 @@
+:root {
+  --sidebar-background: white;
+  --user-info-background: var(--mau13);
+  --profile-menu-li-hover-background: var(--mau4);
+  --profile-menu-li-hover-color: white; /* text*/
+  --profile-menu-li-active-background: var(--mau3);
+  --profile-menu-li-active-color: black;
+  --accManagement-main-background: var(--mau4);
+  --accManagement-tab-background: var(--mau13);
+  --accManagement-tab-ul-hover-background: var(--mau4);
+  --accManagement-tab-ul-hover-color: white;
+  --profile-content-background: var(--mau13);
+
+  --mau1: #86946d;
+  --mau2: #fdd6c2;
+  --mau3: #ccd9b7;
+  --mau4: #7fa390;
+  --mau5: #b0e1e1;
+  --mau6: #b18a81;
+  --mau7: #d9c297;
+  --mau8: #c4a289;
+  --mau9: #7b544c;
+  --mau10: #f6f0eb;
+  --mau11: #d6e1d1;
+  --mau12: #241f1c;
+  --mau13: #fff2e3;
+  --mau14: #f6ffe7;
+}

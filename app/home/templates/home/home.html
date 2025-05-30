@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+<!--  -->
+{% block extra_css %}
+
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/base.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/color.css') }}"
+/>
+{% endblock %}
+
+<!--  -->
+{% block content %}
+<div
+  style="background-color: var(--mau3); gap: 20px; margin: 20px; padding: 20px"
+>
+  <title>Demo Logistic</title>
+
+  <h2>Chọn cấu hình mô hình</h2>
+  <form method="POST">
+    {{ form.csrf_token }}
+
+    <label for="country">Quốc gia:</label>
+    {{ form.country(class="form-select") }} {{ form.hidden_tag() }}
+    <!--  -->
+
+    {{ form.fit_mode.label }} {{ form.fit_mode(id="fit_mode",
+    onchange="toggleManualFields()",class="form-select") }}
+
+    <div
+      id="manual-fields"
+      style="display: none; margin-top: 10px; background-color: var(--mau10)"
+    >
+      <p style="margin-top: 20px; padding-left: 20px">
+        {{ form.r.label }} {{ form.r(class="form-select1") }} {{ form.K.label }}
+        {{ form.K(class="form-select1") }}
+      </p>
+      <p style="margin-bottom: 20px; padding-left: 20px">
+        {{ form.year_start.label }} {{ form.year_start(class="form-select1") }}
+        {{ form.year_end.label }} {{ form.year_end(class="form-select1") }}
+      </p>
+    </div>
+    {{ form.method.label }}
+    <div class="radio-group">
+      {% for subfield in form.method %}
+      <input
+        type="radio"
+        id="{{ subfield.id }}"
+        name="{{ subfield.name }}"
+        value="{{ subfield._value() }}"
+        {%
+        if
+        subfield.checked
+        %}checked{%
+        endif
+        %}
+      />
+      <label for="{{ subfield.id }}">{{ subfield.label.text }}</label>
+      {% endfor %}
+    </div>
+
+    <!--  -->
+    {{ form.compare.label }}
+    <div class="radio-group">
+      {% for subfield in form.compare %}
+      <input
+        type="radio"
+        id="{{ subfield.id }}"
+        name="{{ subfield.name }}"
+        value="{{ subfield._value() }}"
+        {%
+        if
+        subfield.checked
+        %}checked{%
+        endif
+        %}
+      />
+      <label for="{{ subfield.id }}">{{ subfield.label.text }}</label>
+      {% endfor %}
+    </div>
+    <br />
+    {{ form.submit(class="btn btn-primary mt-2") }}
+  </form>
+</div>
+
+<!-- hien thi content -->
+{% if t_real is not none and t_real|length > 0 and P_real is not none and
+P_real|length > 0 %}
+<div>
+  <h2 style="font-weight: bold">
+    Bảng dân số theo từng năm của {{selected_country}}
+  </h2>
+
+  <div class="bang-co-thanh-truot">
+    <table>
+      <tr>
+        <th>Năm</th>
+        {% for year in t_real %}
+        <th>{{ year }}</th>
+        {% endfor %}
+        <!--  -->
+      </tr>
+      <tr>
+        <th>Dân số</th>
+        {% for popu in P_real %}
+        <td>{{ popu }}</td>
+        {% endfor %}
+        <!--  -->
+      </tr>
+    </table>
+  </div>
+</div>
+<!--  -->
+{% endif %}
+<!--  -->
+
+{% if fit_chart %}
+<h3>Biểu đồ</h3>
+<img
+  src="data:image/png;base64,{{ fit_chart }}"
+  alt="Biểu đồ dân số theo r,K và giá trị thực tế"
+/>
+{% endif %}
+
+<!--  -->
+<div class="bang-co-thanh-truot">
+  <div>
+    <h2>
+      Bảng so sánh dân số tính bằng {{selected_method}} và nghiệm chính xác
+    </h2>
+
+    <div id="compare-table">{{ compare_table|safe }}</div>
+  </div>
+</div>
+<!--  -->
+{% if fit_chart %}
+<h3>Biểu đồ so sánh</h3>
+<img src="data:image/png;base64,{{ compare_chart }}" alt="Biểu đồ so sánh" />
+{% endif %} {% endblock %}
