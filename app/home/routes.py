@@ -392,6 +392,7 @@ def home():
     compare_table = None
     selected_method_label = None
     label_method_map = dict(form.method.choices)
+    compare_type = None
     
     if form.validate_on_submit():
         if form.country.data:
