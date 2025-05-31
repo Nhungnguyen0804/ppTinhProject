@@ -51,9 +51,12 @@ def load_df_country(df, country_name):
 # =============
 
 
-def fit_r_K(logistic_model, t_index, P_real):
+def fit_r_K(logistic_model, t_index, P_real,P0):
+
+    def logistic_model_P0(t, r, K):
+        return logistic_model(t, r, K, P0)
     # Fit tham số r, K
-    res, _ = curve_fit(logistic_model, t_index, P_real, p0=[0.02, max(P_real) * 1.5])
+    res, _ = curve_fit(logistic_model_P0, t_index, P_real, p0=[0.02, max(P_real) * 1.5])
     r_fit, K_fit = res
 
     print(f"Tham số theo mô hình Logistic:")
@@ -67,19 +70,16 @@ def set_r_and_K(r, K):
     globals.K = K
 
 
-def show_fit_chart(r_fit, K_fit, r_input, K_input, t_index, logistic_model):
-    t_real = globals.t_real
-    
-    P_real = globals.P_real
+def show_fit_chart(r_fit, K_fit, r_input, K_input, t_index, logistic_model, P0 , t_real, P_real):
 
     t_fit = np.linspace(0, t_index[-1], 100)
-    P_fit = logistic_model(t_fit, r_fit, K_fit)
+    P_fit = logistic_model(t_fit, r_fit, K_fit, P0)
     plt.figure(figsize=(15, 9))
     plt.plot(t_real, P_real, "o", label="Dữ liệu thực tế")
     plt.plot(t_fit + t_real.min(), P_fit, "-", label="Mô hình logistic fit")
     if r_input != None and K_input != None:
         t_input = np.linspace(0, t_index[-1], 100)
-        P_input = logistic_model(t_input, r_input, K_input)
+        P_input = logistic_model(t_input, r_input, K_input, P0)
         plt.plot(t_input + t_real.min(), P_input, "b", label="Dữ liệu mô phỏng")
     plt.xlabel("Năm")
     plt.ylabel("Dân số")
@@ -102,7 +102,8 @@ def show_fit_chart(r_fit, K_fit, r_input, K_input, t_index, logistic_model):
 def show_compare_chart(t_real, t_rk4, P_rk4, P_exact, P_real, label):
     plt.figure(figsize=(15, 9))
     # Vẽ nghiệm RK4 (Logistic)
-    plt.plot(t_rk4, P_rk4, "o--", label=label, markersize=4)
+    t_rk4_year = t_rk4 + t_real.min()
+    plt.plot(t_rk4_year, P_rk4, "o--", label=label, markersize=4)
 
     # Vẽ nghiệm chính xác (Logistic)
     plt.plot(t_real, P_exact, "r-", label="Nghiệm chính xác", linewidth=2)
@@ -409,7 +410,7 @@ def home():
         globals.P_real = P_real
         t_index = t_real - t_real[0]
         P0 = P_real[0]  # dân số năm đầu, global
-        globals.P0 = P0  # can su dung o models logistic
+        # globals.P0 = P0  # can su dung o models logistic
 
         from app.models.logistic import logistic_model
 
@@ -417,7 +418,7 @@ def home():
         K_input = 0
         
         # fit r, K
-        r_fit, K_fit = fit_r_K(logistic_model, t_index, P_real)
+        r_fit, K_fit = fit_r_K(logistic_model, t_index, P_real,P0)
         if selected_fit_mode == "fit":
             
             # r,K global
@@ -427,7 +428,7 @@ def home():
 
             # if t_real is not None and P_real is not None:
             fit_chart = show_fit_chart(
-                r_fit, K_fit, r_input, K_input, t_index, logistic_model
+                r_fit, K_fit, r_input, K_input, t_index, logistic_model, P0, t_real, P_real
             )
             n = len(t_index)
             t_rk4, P_rk4 = calculator_rk4(t_index, P0, rk4)
@@ -440,8 +441,14 @@ def home():
             t_rkf45_nam = t_index
             P_rkf45_nam = rkf45_interp(t_index)
             # Nghiệm chính xác trong điều kiện lý tưởng
-            P_exact = logistic_model(t_index, r_fit, K_fit)
-        
+            P_exact = logistic_model(t_index, r_fit, K_fit,P0)
+            print(t_index)
+            print(r_fit)
+            print(K_fit)
+            print(P_rk4)
+            print(P_adam)
+            print(P_rkf45_nam)
+            print(P0)
             if selected_method == 'all':
                 label1 = label_method_map['rk4']
                 label2 = label_method_map['adam']
@@ -461,68 +468,68 @@ def home():
                         t_real, P_real, P_selected_method, P_exact, selected_method_label, compare_type
                     )
                 compare_chart = show_compare_chart(t_real, t_rk4, P_selected_method, P_exact, P_real ,selected_method_label)
-        else :
+        elif selected_fit_mode =='manual' :
             start_year = form.year_start.data
             end_year = form.year_end.data
             r_input = form.r.data
             K_input = form.K.data
-            set_r_and_K(r_input, K_input)
-            r,K = globals.r, globals.K
+            t_real1 = t_real
+            P_real1 = P_real
+            r = r_input
+            K = K_input
+            # set_r_and_K(r_input, K_input)
+            # r,K = globals.r, globals.K
             # Lọc t_real theo khoảng [start_year, end_year]
             if end_year == 2022:
-                mask = (t_real >= start_year) & (t_real <= end_year)
-                t_filtered = t_real[mask]
-                P_filtered = P_real[mask]
+                mask = (t_real1 >= start_year) & (t_real1 <= end_year)
+                t_filtered = t_real1[mask]
+                P_filtered = P_real1[mask]
             else: 
                 # Lọc dữ liệu từ start_year đến 2022
-                mask = (t_real >= start_year)
-                t_filtered = t_real[mask]
-                P_filtered = P_real[mask]
+                mask = (t_real1 >= start_year)
+                t_filtered = t_real1[mask]
+                P_filtered = P_real1[mask]
 
                 # Thêm các năm sau 2022 đến end_year
                 t_future = np.arange(2023, end_year + 1)
                 P_future = [] 
                 for year in t_future:
-                    P_pred = logistic_model(year, r, K)
+                    P_pred = logistic_model(year, r, K, P01)
                     P_future.append(P_pred)
                 
                 # Nối dữ liệu quá khứ và tương lai lại
                 t_filtered = np.concatenate((t_filtered, t_future))
                 P_filtered = np.concatenate((P_filtered, P_future))
       
-            t_index = t_filtered - t_filtered[0]
-            P0 = P_filtered[0]
+            t_index1 = t_filtered - t_filtered[0]
+            P01 = P_filtered[0]
 
             
-            globals.P0 = P0
-            globals.t_real = t_filtered
-            globals.P_real = P_filtered
-            print(globals.t_real, globals.P_real)
             
             # if t_real is not None and P_real is not None:
             fit_chart = show_fit_chart(
-                r_fit, K_fit, r_input, K_input, t_index, logistic_model
+                r_fit, K_fit, r_input, K_input, t_index1, logistic_model, P01, t_filtered, P_filtered
             )
 
             from app.models.logistic import rk4, adam4, h, logistic_derivative, rkf45
-            t_rk4, P_rk4 = calculator_rk4(t_index, P0, rk4)
-            n = len(t_index)
+            t_rk4, P_rk4 = calculator_rk4(t_index1, P01, rk4)
+            n = len(t_index1)
         
-            t_adam, P_adam = calculator_adam(t_index, n, P0, adam4)
+            t_adam, P_adam = calculator_adam(t_index1, n, P01, adam4)
             
             # Tính nghiệm RKF45 tại từng năm nguyên (trùng với dữ liệu thực tế)
-            t_rkf45, P_rkf45 = rkf45(logistic_derivative, (t_index[0], t_index[-1]), P0, h_initial=1, tol=1e-6, args=(r, K))
+            t_rkf45, P_rkf45 = rkf45(logistic_derivative, (t_index1[0], t_index1[-1]), P01, h_initial=1, tol=1e-6, args=(r, K))
             
             # Nội suy dân số RKF45 tại các năm nguyên
             from scipy.interpolate import interp1d
             rkf45_interp = interp1d(t_rkf45, P_rkf45, kind='linear', fill_value="extrapolate")
-            P_rkf45_nam = rkf45_interp(t_index)
+            P_rkf45_nam = rkf45_interp(t_index1)
             t_rkf45_nam = t_adam
             print((t_rk4))
             print((t_adam))
             print((t_rkf45_nam))
             # Nghiệm chính xác trong điều kiện lý tưởng
-            P_exact = logistic_model(t_index, r, K)
+            P_exact = logistic_model(t_index1, r, K, P01)
             
             if selected_method == 'all':
                 label1 = label_method_map['rk4']

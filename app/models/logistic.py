@@ -4,15 +4,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from app import globals
 df_country =globals.df_country
-P0 = globals.P0
+
 
 t_real = globals.t_real
 
 h = 1
 
 #Hàm mô hình logistic
-def logistic_model(t, r, K):
-    
+def logistic_model(t, r, K, P0):
     return K / (1 + ((K - P0) / P0) * np.exp(-r * t))
 
 
